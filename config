@@ -1,0 +1,265 @@
+# ~/.config/i3/config
+
+set $mod Mod4
+set $alt Mod1
+
+set_from_resource $coloract i3wm.color9 'FF0000'
+set_from_resource $colorin i3wm.color1  '00FF00'
+set_from_resource $color15 i3wm.color15 '0000FF'
+set_from_resource $split i3wm.color10 'FFFF00'
+set_from_resource $coloru i3wm.color2 '00FFFF'
+set_from_resource $color0 i3wm.color0 'FF00FF'
+set_from_resource $color8 i3wm.color8 'FFFFFF'
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+font pango:Hermit, 8px
+floating_modifier $mod
+default_border pixel 1
+default_floating_border pixel 1
+
+focus_wrapping no
+
+set $center floating enable, resize set 60 ppt 50 ppt, move position 20 ppt 25 ppt
+
+######### COLORS ##########
+#
+# class                 border    backgr    text    indicator child_border
+client.focused          $coloract $coloract $color0 $coloract $coloract
+client.focused_inactive $coloract $coloract $color0 $coloract $colorin
+client.unfocused        $coloract $coloract $color0 $coloract $colorin
+client.urgent           $coloru   $coloru   $color0 $coloru   $coloru
+client.placeholder      $color0   $color8   $color0 $color0   $color8
+client.background       $color0
+
+###### KEYBINDINGS #######
+# Volume
+bindsym XF86AudioRaiseVolume exec --no-startup-id pa-all-sink.sh +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id pa-all-sink.sh -5%
+bindsym Shift+XF86AudioRaiseVolume exec --no-startup-id pa-all-sink.sh +1%
+bindsym Shift+XF86AudioLowerVolume exec --no-startup-id pa-all-sink.sh -1%
+
+# Media player controls
+bindsym F8 exec --no-startup-id playerctl next
+bindsym Shift+F8 exec --no-startup-id playerctl position 5+
+bindsym Ctrl+F8 exec --no-startup-id playerctl position 60+
+bindsym $mod+F8 exec --no-startup-id playerctld shift
+
+bindsym F7 exec --no-startup-id playerctl previous
+bindsym Shift+F7 exec --no-startup-id playerctl position 5-
+bindsym Ctrl+F7 exec --no-startup-id playerctl position 60-
+bindsym $mod+F7 exec --no-startup-id playerctld unshift
+
+bindsym F6 exec --no-startup-id playerctl play-pause
+bindsym F5 exec --no-startup-id playerctl -a stop
+
+bindsym XF86AudioMute exec --no-startup-id urxvtc -e ncmpcpp-class
+bindsym $mod+XF86AudioMute exec --no-startup-id dmenu_play
+bindsym $mod+Ctrl+XF86AudioMute exec --no-startup-id mpc clear
+bindsym $mod+Shift+XF86AudioMute exec --no-startup-id covers
+
+# Mark and swap containers
+bindsym $mod+m exec --no-startup-id i3-input -F 'mark %s' -l 1 -P 'Mark: '
+bindsym $mod+Shift+m exec --no-startup-id i3-input -F 'swap container with mark %s' -l 1 -P 'Swap: '
+
+# Rename workspaces
+bindsym $mod+Shift+n exec --no-startup-id i3-input -F 'rename workspace to %s' -P 'Name: '
+
+# Make the currently focused window a scratchpad
+bindsym $mod+minus move scratchpad
+
+# Show the first scratchpad window
+bindsym $mod+equal scratchpad show
+
+# kill focused window
+bindsym $mod+q kill
+
+# toggle gap size
+# bindsym $mod+g exec gaps
+
+# change width/height
+bindsym $mod+Ctrl+Shift+slash  exec --no-startup-id i3-input -F 'resize set width %s ppt' -P 'Horiz: '
+bindsym $mod+Ctrl+slash  exec --no-startup-id i3-input -F 'resize set height %s ppt' -P 'Vert: '
+bindsym $mod+s exec --no-startup-id i3-input -F 'resize set %s ppt %s ppt' -P 'Size: '
+
+# focus window
+bindsym $mod+Left  focus left
+bindsym $mod+Down  focus down
+bindsym $mod+Up    focus up
+bindsym $mod+Right focus right
+
+# move window
+bindsym $mod+Shift+Left  move left 1
+bindsym $mod+Shift+Down  move down 1
+bindsym $mod+Shift+Up    move up 1
+bindsym $mod+Shift+Right move right 1
+
+# split in horizontal and vertical orientation
+bindsym $mod+slash split v
+bindsym $mod+Shift+slash split h
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+t layout tabbed
+bindsym $mod+e layout toggle split
+
+# change borders
+bindsym $mod+u border none
+bindsym $mod+y border pixel 1
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# toggle tiling / floating, sticky
+bindsym $mod+space floating toggle
+bindsym $mod+o sticky toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+Shift+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+BackSpace focus parent
+
+# change monitor
+bindsym $mod+$alt+Left move workspace to output left
+bindsym $mod+$alt+Right move workspace to output right
+
+#navigate workspaces next/previous/new
+bindsym $mod+Tab workspace next_on_output
+bindsym $mod+Shift+Tab workspace prev_on_output
+
+bindsym $mod+Ctrl+Right exec i3-swap right
+bindsym $mod+Ctrl+Left exec i3-swap left
+bindsym $mod+Ctrl+Down exec i3-correct
+bindsym $mod+Ctrl+Up exec i3-new
+
+# bindsym $mod+Ctrl+Shift+Right exec i3-jump right
+# bindsym $mod+Ctrl+Shift+Left exec i3-jump left
+# bindsym $mod+Ctrl+Shift+Down move container to workspace back_and_forth
+
+###### EXECUTE PROGRAMS ######
+
+bindsym $mod+Return exec --no-startup-id urxvtc
+bindsym $mod+$alt+Return exec --no-startup-id urxvtc -e tmux new -As0
+bindsym $mod+Ctrl+Return exec firefox-nightly
+bindsym XF86Mail exec --no-startup-id thunderbird
+bindsym XF86Calculator exec --no-startup-id urxvtc -title floating -e bc -ql
+bindsym $mod+n exec --no-startup-id urxvtc -title floating -e sncli
+bindsym $mod+p exec --no-startup-id urxvtc -title floating -e pia
+
+bindsym Print exec --no-startup-id scrot ~/img/cap/%F.png
+bindsym Shift+Print exec --no-startup-id flameshot full -p ~/img/cap
+bindsym $mod+w exec --no-startup-id walls
+bindsym $mod+Shift+w exec --no-startup-id white
+
+bindsym $mod+Ctrl+space exec toggle_bar
+
+bindsym $mod+b exec mpc pause, exec --no-startup-id bluetoothctl connect 1C:52:16:63:52:9D
+# bindsym $mod+b exec --no-startup-id dmenu_bluetooth
+bindsym $mod+Ctrl+b exec mpc pause, exec --no-startup-id bluetoothctl disconnect
+bindsym $mod+Shift+b exec --no-startup-id urxvtc -title floating -e 'bluetoothctl'
+
+
+
+
+bindsym $mod+backslash exec dmenu_frecency
+
+# switch to workspace
+bindsym $mod+0 workspace 0
+bindsym $mod+grave workspace 0
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+
+# move focused container to workspace
+bindsym $mod+Shift+0 move container to workspace 0
+bindsym $mod+Shift+grave move container to workspace 0
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+
+# rename current workspace
+bindsym $mod+Ctrl+0 rename workspace to 0
+bindsym $mod+Ctrl+grave rename workspace to 0
+bindsym $mod+Ctrl+1 rename workspace to 1
+bindsym $mod+Ctrl+2 rename workspace to 2
+bindsym $mod+Ctrl+3 rename workspace to 3
+bindsym $mod+Ctrl+4 rename workspace to 4
+bindsym $mod+Ctrl+5 rename workspace to 5
+bindsym $mod+Ctrl+6 rename workspace to 6
+bindsym $mod+Ctrl+7 rename workspace to 7
+bindsym $mod+Ctrl+8 rename workspace to 8
+bindsym $mod+Ctrl+9 rename workspace to 9
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+
+bindsym $mod+Ctrl+r exec rotate
+# exit i3 (logs you out of your X session)
+# bindsym $mod+Shift+x exec --no-startup-id "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
+
+bindsym $mod+Escape exec sudo dmenu_pwr 
+
+mode "resize" {
+        # resize windows
+        bindsym Left resize shrink width 20 px
+        bindsym Right resize grow width 20 px
+        bindsym Down resize grow height 20 px
+        bindsym Up resize shrink height 20 px
+
+        bindsym Shift+Left resize shrink width 1 px
+        bindsym Shift+Right resize grow width 1 px
+        bindsym Shift+Down resize grow height 1 px
+        bindsym Shift+Up resize shrink height 1 px
+
+        # resize gaps
+        bindsym minus       gaps outer current plus 10
+        bindsym plus        gaps outer current minus 10
+        bindsym Shift+minus gaps inner current plus 10
+        bindsym Shift+plus  gaps inner current minus 10
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+
+##### WINDOW SHAPE ######
+bindsym $mod+mod2+KP_5 $center
+bindsym $mod+r mode "resize"
+
+###### STARTUP ######
+exec_always setxkbmap -option caps:escape
+
+exec_always xinput set-prop 8 290 0
+exec_always xinput set-prop 8 279 0
+exec_always xinput set-prop 8 155 1 0 0 0 1 0 0 0 1
+
+exec_always normal && walset && toggle_bar reset
+
+exec --no-startup-id mpDris2
+exec --no-startup-id pdfd
+exec --no-startup-id urxvtd
+# exec --no-startup-id compton
+exec --no-startup-id firefox-nightly
+
+# exec --no-startup-id hhpc -i 3
+# exec_always xrandr -o left
+# exec --no-startup-id compton
+# exec --no-startup-id dockd --daemon
+# smart_borders on
+# smart_borders no_gaps
+# border_radius 13
+
+# for_window [class="ncmpcpp"] floating enable

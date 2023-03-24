@@ -1,9 +1,12 @@
 # i3 Scripts
 Use the [i3pc library](https://pypi.org/project/i3ipc/)
-To perform various actions on the [i3 window manager](https://i3wm.org/)
+to perform various actions on the [i3 window manager](https://i3wm.org/)
+
+## config
+i3wm config file
 
 ## i3-correct
-Renumber workspaces to be in sequential.
+Renumber workspaces to be sequential.
 
 ## i3-new
 Move container to lowest unused workspace number.
