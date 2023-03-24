@@ -1,0 +1,23 @@
+#!/bin/python
+
+import asyncio
+from i3ipc.aio import Connection
+
+async def main():
+  i3 = await Connection().connect()
+
+  ws = await i3.get_workspaces()
+  ws = sorted(ws, key=lambda x: x.output)
+  ws = list(map(lambda x: int(x.name), ws))
+
+  for i in range(max(ws)+1):
+    if (i not in ws):
+      a = await i3.command(f'move container to workspace {i}')
+      print(i, a[0].success)
+      break
+  else:
+    a = await i3.command(f'move container to workspace {max(ws) + 1}')
+    print(i, a[0].success)
+
+asyncio.run(main())
+

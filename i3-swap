@@ -1,0 +1,26 @@
+#!/bin/python
+
+import asyncio
+from i3ipc.aio import Connection
+import sys
+
+async def main():
+  i3 = await Connection().connect()
+
+  ws = await i3.get_workspaces()
+  ws = sorted(ws, key=lambda x: x.num)
+  ws = sorted(ws, key=lambda x: x.output)
+
+  o = -1 if sys.argv[1] == 'left' else 1
+  r = range(len(ws))
+  for i in r:
+    if i+o in r:
+      wst = ws[i]
+      wen = ws[i+o]
+      if wst.focused and wst.output == wen.output:
+        await i3.command(f'rename workspace {wen.name} to "-1"')
+        await i3.command(f'rename workspace {wst.name} to {wen.name}')
+        await i3.command(f'rename workspace -1 to {wst.name}')
+
+asyncio.run(main())
+

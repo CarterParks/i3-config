@@ -1,0 +1,26 @@
+#!/bin/python
+
+import asyncio
+from i3ipc.aio import Connection
+
+async def main():
+  i3 = await Connection().connect()
+
+  ws = await i3.get_workspaces()
+  ws = sorted(ws, key=lambda x: x.output)
+  ws = list(map(lambda x: x.name, ws))
+
+  for i, w in enumerate(ws):
+    a = await i3.command(f'rename workspace {w} to {w}{w}')
+    print(i, w, *map(lambda x: x[0].success, [a]))
+
+  ws = await i3.get_workspaces()
+  ws = sorted(ws, key=lambda x: x.output)
+  ws = list(map(lambda x: x.name, ws))
+
+  for i, w in enumerate(ws):
+    a = await i3.command(f'rename workspace {w} to {i}')
+    print(i, w, *map(lambda x: x[0].success, [a]))
+
+asyncio.run(main())
+
